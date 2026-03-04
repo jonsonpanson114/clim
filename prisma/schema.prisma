@@ -1,0 +1,100 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Video {
+  id              String   @id @default(uuid())
+  youtubeId       String   @unique
+  title           String
+  description     String?
+  thumbnailUrl    String?
+  publishedAt     DateTime
+  transcript      String?
+  summary         String?
+  summaryData     String? 
+  difficultyLevel String? 
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  notes           VideoNote?
+  quizzes         Quiz[]
+  records         PracticeRecord[]
+  favorites       Favorite[]
+  history         History[]
+}
+
+model Favorite {
+  videoId   String   @id @unique
+  video     Video    @relation(fields: [videoId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model History {
+  videoId   String   @id @unique
+  video     Video    @relation(fields: [videoId], references: [id])
+  watchedAt DateTime @default(now())
+}
+
+model CommonTip {
+  id             String   @id @default(uuid())
+  title          String
+  content        String
+  category       String   
+  difficulty     String?
+  sourceVideoIds String   
+  createdAt      DateTime @default(now())
+}
+
+model PracticeRecord {
+  id             String   @id @default(uuid())
+  gymName        String?
+  date           DateTime @default(now())
+  duration       Int?     
+  practiceMenuId String?
+  videoId        String?
+  video          Video?   @relation(fields: [videoId], references: [id])
+  routes         String   
+  reflection     String?
+  nextGoal       String?
+  createdAt      DateTime @default(now())
+}
+
+model VideoNote {
+  id        String   @id @default(uuid())
+  videoId   String   @unique
+  video     Video    @relation(fields: [videoId], references: [id])
+  content   String
+  updatedAt DateTime @updatedAt
+}
+
+model Quiz {
+  id        String   @id @default(uuid())
+  videoId   String
+  video     Video    @relation(fields: [videoId], references: [id])
+  question  String
+  options   String   
+  answer    String
+  createdAt DateTime @default(now())
+}
+
+model PracticeMenu {
+  id        String   @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model QASession {
+  id        String   @id @default(uuid())
+  question  String
+  answer    String
+  sources   String?  
+  createdAt DateTime @default(now())
+}

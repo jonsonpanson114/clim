@@ -1,0 +1,143 @@
+[Sync] Started at 2026-03-04T23:10:36.357Z
+[Sync] Channel: UCBtRI97Yh3l6pZzLvBYPq8Q
+[Sync] getLatestVideos returned 50 videos (max: 50).
+[Sync] Checking video: トップクライマーに学ぶ、ダイノのコツ‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#boulder #sportclimbing
+[Sync] Already exists: 3LYd-7IP44A
+[Sync] Checking video: オブザベーションのコツ‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#boulder #sportclimbing
+[Sync] Already exists: 1f8usHVW5TU
+[Sync] Checking video: トップクライマーに学ぶ小さい足の踏み替え　#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#boulder #sportclimbing
+[Sync] Already exists: uCls05se93Y
+[Sync] Checking video: キッズクライマーのためのコアコンディショニング　#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#boulder #sportclimbing
+[Sync] Already exists: TA8XbOg39qE
+[Sync] Checking video: コーディネーションのコツ‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#boulder #sportclimbing
+[Sync] Already exists: cGInlGbU5Lw
+[Sync] Checking video: キッズのコンプレッション課題‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#boulder #sportclimbing
+[Sync] No transcript found for mqETOUWcIxA. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: 2c13c9e4-9745-4100-8b29-b81f986ded89
+[Sync] Checking video: キッズクライマーあるあるの癖を治す‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#boulder #sportclimbing
+[Sync] No transcript found for V3HYU4juvZ0. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: be435a02-263f-430b-8ec4-97a7e873e3ce
+[Sync] Checking video: ホッピングコーディネーションのコツ‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#boulder #sportclimbing
+[Sync] No transcript found for CcuF2LISyI4. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: 46ec8207-1fa0-4b47-ab20-95fa73aebbd1
+[Sync] Checking video: ガストンカチのコツ‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#boulder #sportclimbing
+[Sync] No transcript found for rLiRMWT_uvY. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: 3a150c7a-bd0d-4149-87f1-3a48ec9e138d
+[Sync] Checking video: トウフックのコツの応用‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#boulder #sportclimbing
+[Sync] No transcript found for 7EqLh0sflvs. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: eaec5e2b-a472-4f6e-a480-8e4cb00d0fa5
+[Sync] Checking video: 振られが安定して止まる‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#boulder #sportclimbing
+[Sync] No transcript found for 9BTG36P1d8E. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: 730a8b02-2ab7-4044-8d65-5974ac151ea8
+[Sync] Checking video: JBCと似たクロス課題を登る生徒‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#boulder #sportclimbing
+[Sync] No transcript found for gVGYsRAqfGA. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: fa79b911-481d-4067-802a-f3be356e923e
+[Sync] Checking video: ヤンヤムーブと楢﨑ムーブをパクる❗️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#boulder #sportclimbing
+[Sync] No transcript found for pu8bL7m7V4Y. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: 66029c62-79ea-4b06-8ae5-ac85c62b07ed
+[Sync] Checking video: 準備をしないと取れない‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#boulder #sportclimbing
+[Sync] No transcript found for LTisxknlwcs. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: f2b97b02-4637-42e7-afd4-61044a532e60
+[Sync] Checking video: ランジのコツ‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#boulder #sportclimbing
+[Sync] No transcript found for f08_ZTxUV2A. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: e43b33a9-aaa5-40bb-a156-50b57368a284
+[Sync] Checking video: ダイナミッククロスのコツ‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#boulder #sportclimbing
+[Sync] No transcript found for jAzoqeRiuds. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: 13ddf097-299b-484c-8cf0-720f3f8b8614
+[Sync] Checking video: 強傾斜のコアトレ‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#boulder #sportclimbing
+[Sync] No transcript found for NImSjuCsogE. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: d8e13b36-b07f-4870-bbf1-267dbb0e32c5
+[Sync] Checking video: 足のポジショニング‼️ビーパンプ荻窪の2級　　　#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#boulder #sportclimbing
+[Sync] No transcript found for P2PJI0tuGjQ. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: 03911887-126e-4347-9699-168afd6992cd
+[Sync] Checking video: 逆足ムーブのコアトレ‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#boulder #sportclimbing
+[Sync] No transcript found for -6bNJuhAO3U. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: 84acbcf2-acc0-4cf5-8cd4-9fec8eb1d5a5
+[Sync] Checking video: トップ選手のパドルダイノをパクる‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#boulder #sportclimbing
+[Sync] No transcript found for 4X4_oKLUoJg. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: b50b2180-b955-4766-97e0-6373cd8f4e7e
+[Sync] Checking video: ランジのマイクロチップス‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#boulder #sportclimbing
+[Sync] No transcript found for rekpayox7BM. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: 1a4f07dc-e3e2-4d2a-a8ec-2a6946e87e99
+[Sync] Checking video: パドルダイノのコツ‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#講師　#コーチ　#coach 　#boulder #sportclimbing
+[Sync] No transcript found for xMFCajNAiaQ. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: 13dc485d-19a0-473f-b3b0-cab980b870bf
+[Sync] Checking video: クロスムーブのコツ‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#講師　#コーチ　#coach 　#boulder #sportclimbing
+[Sync] No transcript found for ITP23O_1anA. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: 16f1e16b-3034-436d-911c-979f3cda392a
+[Sync] Checking video: 小さい保持のコツ‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#講師　#コーチ　#coach 　#boulder #sportclimbing
+[Sync] No transcript found for ixPzAQ3Gkro. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: f1d68017-aace-4393-9ef6-8a136a734dda
+[Sync] Checking video: ランニングコーディネーションのコツ‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#講師　#コーチ　#coach 　#boulder
+[Sync] No transcript found for QwzrlndKn2M. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: c7aacb02-6f45-4862-b70b-83d31e34e68f
+[Sync] Checking video: パドルダイノの勢いづけのコツ‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#講師　#コーチ　#coach 　#boulder
+[Sync] No transcript found for nj2bbl92Xqw. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: d29ce719-a0c0-4426-a886-8b2058ac16ff
+[Sync] Checking video: サイドコーディネーションのコツ‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#講師　#コーチ　#coach 　#boulder
+[Sync] No transcript found for MGPDwKQeFtQ. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: b63a7480-41e5-4d3b-bc82-5d67ee5b6e02
+[Sync] Checking video: ダブルダイノでプッシュ止めのコツ‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#講師　#コーチ　#coach 　#boulder
+[Sync] No transcript found for ZDluAFOt654. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: a7f8e2d9-2b73-4d5c-b9b6-c019cddc571b
+[Sync] Checking video: ダブルダイノをとめるこつ‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#講師　#コーチ　#coach 　#boulder #sportclimbing
+[Sync] No transcript found for V8mLkP4d-R0. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: 7bef79b6-db9f-4993-adf5-82d0c770d968
+[Sync] Checking video: 押し込むホールドの保持のコツ‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#講師　#コーチ　#coach 　#boulder
+[Sync] No transcript found for JZw78USt_ak. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: 69c6b657-f3fc-47b6-b9f4-31be978ca635
+[Sync] Checking video: デッドポイントをパクる‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#講師　#コーチ　#coach 　#boulder #sportclimbing
+[Sync] No transcript found for uDMYFAHJYag. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: 63aae85d-94c3-47b7-8fd9-1fff84414319
+[Sync] Checking video: 滑らないように乗り込むコツ‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#講師　#コーチ　#coach 　#boulder
+[Sync] No transcript found for ugWD8Mw6Qpk. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: 69837aa7-dd90-4ec4-be2e-7f59dd89b3f0
+[Sync] Checking video: 垂壁のダイナミックムーブのコツ‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#講師　#コーチ　#coach 　#boulder
+[Sync] No transcript found for IILd-PX4VWQ. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: f4baee27-bcdd-463f-8e0e-f6387fdf95c0
+[Sync] Checking video: 保持力を上げる持ち方‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#講師　#コーチ　#coach 　#boulder #sportclimbing
+[Sync] No transcript found for C9g5JR0nipk. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: 44bebc72-70a4-4a06-afdb-19ba743c242c
+[Sync] Checking video: コーディネーションのコツ‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#講師　#コーチ　#coach 　#boulder
+[Sync] No transcript found for 0pHiLn8vvxo. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: c626c269-b393-48d6-8098-641e6785a880
+[Sync] Checking video: 下半身登りをやってみる‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#講師　#コーチ　#coach 　#boulder #sportclimbing
+[Sync] No transcript found for s6Npp_cYpcE. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: e9c9d39b-2ee4-4482-9829-409fac226556
+[Sync] Checking video: コーディネーションのコツとトレーニング‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#講師　#コーチ　#coach 　#boulder
+[Sync] No transcript found for d7hAXzLfurU. Falling back to Title/Description.
+[Sync] Gemini response received.
+[Sync] Video upserted: 6166cc0d-dc3c-4cee-a01e-4fb650bf4b3a
+[Sync] Checking video: ダイナミックムーブの呼吸法‼️#スポーツクライミング　#ボルダリング　#ボルダー　　#クライミング　#解説　#レッスン　#講師　#コーチ　#coach 　#boulder
+[Sync] No transcript found for UajtmwTHve4. Falling back to Title/Description.
