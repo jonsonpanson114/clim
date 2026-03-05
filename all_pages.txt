@@ -1,0 +1,7 @@
+C:\Users\jonso\.gemini\clim\src\app\(app)\page.tsx
+C:\Users\jonso\.gemini\clim\src\app\(app)\level\page.tsx
+C:\Users\jonso\.gemini\clim\src\app\(app)\practice\page.tsx
+C:\Users\jonso\.gemini\clim\src\app\(app)\qa\page.tsx
+C:\Users\jonso\.gemini\clim\src\app\(app)\records\page.tsx
+C:\Users\jonso\.gemini\clim\src\app\(app)\tips\page.tsx
+C:\Users\jonso\.gemini\clim\src\app\(app)\videos\[id]\page.tsx

@@ -4,9 +4,9 @@ import { climbingCoachModel } from "@/lib/gemini/client";
 
 export async function GET(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
-    const videoId = params.id;
+    const { id: videoId } = await params;
 
     try {
         // 1. すでにクイズがあるかチェック

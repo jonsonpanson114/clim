@@ -1,0 +1,7 @@
+(app
+(app)
+api
+favicon.ico
+globals.css
+layout.tsx
+page.tsx

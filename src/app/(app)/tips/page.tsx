@@ -9,11 +9,10 @@ const categoryIcons: Record<string, any> = {
     "道具": Layers,
 };
 
-export default async function TipsPage({
-    searchParams,
-}: {
-    searchParams: { category?: string };
+export default async function TipsPage(props: {
+    searchParams: Promise<{ category?: string }>;
 }) {
+    const searchParams = await props.searchParams;
     const category = searchParams.category;
 
     const tips = await prisma.commonTip.findMany({

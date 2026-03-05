@@ -1,8 +1,5 @@
 {
-    "crons": [
-        {
-            "path": "/api/sync",
-            "schedule": "0,30 * * * *"
-        }
-    ]
+    "github": {
+        "silent": true
+    }
 }

@@ -1,70 +1,20 @@
-"use client";
-
 import { notFound } from "next/navigation";
-import { useEffect, useState } from "react";
-import { Lightbulb, Info, CheckCircle2, Youtube, Volume2, Square } from "lucide-react";
+import { prisma } from "@/lib/db/prisma";
+import { Lightbulb, Info, CheckCircle2, Youtube } from "lucide-react";
 
-interface VideoData {
-    id: string;
-    youtubeId: string;
-    title: string;
-    summary: string;
-    summaryData: string;
-    difficultyLevel: string;
-}
-
-export default function VideoDetailPage({
-    params,
-}: {
+export default async function VideoDetailPage(props: {
     params: Promise<{ id: string }>;
 }) {
-    const [video, setVideo] = useState<VideoData | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [isSpeaking, setIsSpeaking] = useState(false);
+    const params = await props.params;
+    const video = await prisma.video.findUnique({
+        where: { youtubeId: params.id },
+    });
 
-    useEffect(() => {
-        const fetchVideo = async () => {
-            const resolvedParams = await params;
-            const res = await fetch(`/api/videos/${resolvedParams.id}`);
-            if (res.ok) {
-                const data = await res.json();
-                setVideo(data);
-            }
-            setLoading(false);
-        };
-        fetchVideo();
-    }, [params]);
-
-    if (loading) return <div className="p-8 text-silk/40">Loading coaching data...</div>;
-    if (!video) notFound();
+    if (!video) {
+        notFound();
+    }
 
     const analysisData = video.summaryData ? JSON.parse(video.summaryData) : null;
-
-    const handleSpeak = () => {
-        if (!window.speechSynthesis) return;
-
-        if (isSpeaking) {
-            window.speechSynthesis.cancel();
-            setIsSpeaking(false);
-            return;
-        }
-
-        const text = `
-            ${video.title}のポイントを解説するぜ。
-            要約。${video.summary}。
-            重要ポイント。${analysisData?.keyPoints?.join("。")}。
-            トレーニングメニュー。${analysisData?.trainingMenu}。
-            以上だ。高みを目指して頑張れよ。
-        `;
-
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = "ja-JP";
-        utterance.rate = 1.0;
-        utterance.onend = () => setIsSpeaking(false);
-
-        setIsSpeaking(true);
-        window.speechSynthesis.speak(utterance);
-    };
 
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 pb-20">
@@ -78,27 +28,16 @@ export default function VideoDetailPage({
                 ></iframe>
             </section>
 
-            <header className="space-y-4 px-1">
-                <div className="flex justify-between items-start">
-                    <div className="space-y-1">
-                        <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-accent">
-                            <Youtube size={14} />
-                            <span>YouTube Coach Analysis</span>
-                        </div>
-                        <h1 className="text-2xl text-silk font-bold leading-tight">
-                            {video.title}
-                        </h1>
-                    </div>
-                    <button
-                        onClick={handleSpeak}
-                        className={`p-3 rounded-2xl glass border border-white/10 transition-all ${isSpeaking ? 'text-accent border-accent/30 animate-pulse' : 'text-silk/60 hover:text-accent'}`}
-                        title="音声でコツを聴く"
-                    >
-                        {isSpeaking ? <Square size={20} fill="currentColor" /> : <Volume2 size={20} />}
-                    </button>
+            <header className="space-y-2">
+                <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-accent">
+                    <Youtube size={14} />
+                    <span>YouTube Coach Analysis</span>
                 </div>
+                <h1 className="text-2xl text-silk font-bold leading-tight">
+                    {video.title}
+                </h1>
                 <div className="flex gap-2">
-                    <span className="text-[10px] px-2 py-0.5 bg-highlight/10 border border-highlight/20 text-highlight rounded-full uppercase tracking-tighter">
+                    <span className="text-[10px] px-2 py-0.5 bg-highlight/10 border border-highlight/20 text-highlight rounded-full">
                         {video.difficultyLevel || "分析中"}
                     </span>
                 </div>
