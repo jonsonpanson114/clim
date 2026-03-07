@@ -22,7 +22,7 @@ export async function getChannelIdByHandle(handle: string) {
     }
 }
 
-export async function getLatestVideos(channelIdOrHandle: string, maxResults = 10) {
+export async function getLatestVideos(channelIdOrHandle: string, maxResults = 10, pageToken?: string) {
     try {
         let channelId = channelIdOrHandle;
 
@@ -31,7 +31,7 @@ export async function getLatestVideos(channelIdOrHandle: string, maxResults = 10
             const resolvedId = await getChannelIdByHandle(channelIdOrHandle);
             if (!resolvedId) {
                 console.error("Could not resolve handle:", channelIdOrHandle);
-                return [];
+                return { items: [], nextPageToken: undefined };
             }
             channelId = resolvedId;
         }
@@ -42,21 +42,25 @@ export async function getLatestVideos(channelIdOrHandle: string, maxResults = 10
             order: "date",
             maxResults: maxResults,
             type: ["video"],
+            pageToken: pageToken,
             // videoDuration の制限を削除し、Shortsも取得対象にする
         });
 
-        return response.data.items?.map((item) => ({
+        const items = response.data.items?.map((item) => ({
             youtubeId: item.id?.videoId as string,
             title: item.snippet?.title as string,
             description: item.snippet?.description as string,
             thumbnailUrl: item.snippet?.thumbnails?.high?.url as string,
             publishedAt: new Date(item.snippet?.publishedAt as string),
         })) || [];
+
+        return { items, nextPageToken: response.data.nextPageToken || undefined };
     } catch (error) {
         console.error("Error fetching YouTube videos:", error);
-        return [];
+        return { items: [], nextPageToken: undefined };
     }
 }
+
 
 export async function getVideoDetails(videoId: string) {
     try {

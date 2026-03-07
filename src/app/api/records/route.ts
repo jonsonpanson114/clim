@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
+import { generateAICoachAdvice } from "@/lib/ai/coach";
 
 export async function GET() {
     try {
@@ -20,6 +21,11 @@ export async function GET() {
 export async function POST(request: Request) {
     try {
         const body = await request.json();
+
+        // Generate AI coaching advice
+        const routesStr = JSON.stringify(body.routes || []);
+        const aiCoachResult = await generateAICoachAdvice(body.reflection || "", routesStr);
+
         const record = await prisma.practiceRecord.create({
             data: {
                 gymName: body.gymName,
@@ -27,14 +33,18 @@ export async function POST(request: Request) {
                 duration: body.duration,
                 practiceMenuId: body.practiceMenuId,
                 videoId: body.videoId,
-                routes: JSON.stringify(body.routes || []),
+                routes: routesStr,
                 reflection: body.reflection,
-                nextGoal: body.nextGoal,
+                nextGoal: aiCoachResult.nextGoal || body.nextGoal,
+                aiAdvice: aiCoachResult.advice,
+                recommendedVideoId: aiCoachResult.recommendedVideoId
             }
         });
         return NextResponse.json(record);
-    } catch (error) {
+    } catch (error: any) {
         console.error("Record creation error:", error);
-        return NextResponse.json({ error: "Failed to create record" }, { status: 500 });
+        return NextResponse.json({ error: "Failed to create record", message: error.message, stack: error.stack }, { status: 500 });
     }
 }
+
+

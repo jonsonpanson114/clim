@@ -7,18 +7,17 @@ import { SUMMARY_PROMPT } from "@/lib/gemini/prompts";
 
 export const dynamic = "force-dynamic";
 
-import fs from 'fs';
+export async function GET(request: Request) {
+    const { searchParams } = new URL(request.url);
+    const pageToken = searchParams.get("pageToken") || undefined;
+    const channelId = searchParams.get("channelId") || process.env.YOUTUBE_CHANNEL_ID;
 
-export async function GET() {
-    const logFile = 'sync_log.txt';
-    fs.writeFileSync(logFile, `[Sync] Started at ${new Date().toISOString()}\n`);
     const log = (msg: string) => {
         console.log(msg);
-        fs.appendFileSync(logFile, `${msg}\n`);
     };
 
-    const channelId = process.env.YOUTUBE_CHANNEL_ID;
     log(`[Sync] Channel: ${channelId}`);
+
 
     if (!channelId) {
         log(`[Sync] Error: YOUTUBE_CHANNEL_ID not set`);
@@ -27,7 +26,7 @@ export async function GET() {
 
     try {
         const maxResults = 50;
-        const videos = await getLatestVideos(channelId, maxResults);
+        const { items: videos, nextPageToken } = await getLatestVideos(channelId, maxResults, pageToken);
         log(`[Sync] getLatestVideos returned ${videos.length} videos (max: ${maxResults}).`);
         const results = [];
 
@@ -37,11 +36,20 @@ export async function GET() {
                 where: { youtubeId: video.youtubeId }
             });
 
-            if (existing) {
-                log(`[Sync] Already exists: ${video.youtubeId}`);
+            const existingTip = await prisma.commonTip.findFirst({
+                where: { sourceVideoIds: { contains: video.youtubeId } }
+            });
+
+            if (existing && existingTip) {
+                log(`[Sync] Already exists with tip: ${video.youtubeId}`);
                 results.push({ id: video.youtubeId, status: "skipped" });
                 continue;
             }
+
+            if (existing) {
+                log(`[Sync] Video exists but tip missing. Analyzing: ${video.youtubeId}`);
+            }
+
 
             const transcript = await getTranscript(video.youtubeId);
             if (!transcript) {
@@ -103,22 +111,31 @@ export async function GET() {
             });
             log(`[Sync] Video upserted: ${upsertedVideo.id}`);
 
-            // Tipも既存チェックしてから作成（あるいは件数が少ないので単純作成でも良いが、安全のため）
-            await prisma.commonTip.create({
-                data: {
-                    title: `${video.title}のポイント`,
-                    content: analysis.keyPoints.join("\n"),
-                    category: analysis.category || "General",
-                    difficulty: analysis.difficulty,
-                    sourceVideoIds: JSON.stringify([video.youtubeId]),
-                }
-            });
+            // Tipの作成・更新
+            const tipData = {
+                title: `${video.title}のポイント`,
+                content: analysis.keyPoints.join("\n"),
+                category: analysis.category || "ムーブ",
+                difficulty: analysis.difficulty,
+                sourceVideoIds: JSON.stringify([video.youtubeId]),
+            };
+
+            if (existingTip) {
+                await prisma.commonTip.update({
+                    where: { id: existingTip.id },
+                    data: tipData
+                });
+            } else {
+                await prisma.commonTip.create({
+                    data: tipData
+                });
+            }
 
             results.push({ id: video.youtubeId, status: "synced", dbId: upsertedVideo.id });
         }
 
         log(`[Sync] Finished. Total synced: ${results.filter(r => r.status === 'synced').length}`);
-        return NextResponse.json({ success: true, results });
+        return NextResponse.json({ success: true, results, nextPageToken });
     } catch (error) {
         log(`[Sync] Fatal error: ${error}`);
         return NextResponse.json({ error: "Failed to sync videos", detail: String(error) }, { status: 500 });

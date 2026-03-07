@@ -2,6 +2,9 @@ import { prisma } from "@/lib/db/prisma";
 import { ClipboardList, Calendar, MapPin, Target, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { TrainingCalendar } from "@/components/features/TrainingCalendar";
+
+export const dynamic = "force-dynamic";
 
 export default async function RecordsPage() {
     const records = await prisma.practiceRecord.findMany({
@@ -27,24 +30,8 @@ export default async function RecordsPage() {
                 </Link>
             </header>
 
-            <section className="premium-card glass space-y-4 border-l-4 border-accent">
-                <div className="flex items-center gap-2 text-accent">
-                    <Calendar size={18} />
-                    <h2 className="text-sm font-bold uppercase tracking-widest">今月の登攀リズム</h2>
-                </div>
-                <div className="flex justify-between items-center px-2">
-                    {[...Array(7)].map((_, i) => (
-                        <div key={i} className="flex flex-col items-center gap-2">
-                            <span className="text-[10px] text-silk/40 font-mono">03/0{i + 1}</span>
-                            <div className={cn(
-                                "w-3 h-3 rounded-full",
-                                i % 3 === 0 ? "bg-accent shadow-[0_0_8px_rgba(255,184,0,0.5)]" : "bg-white/5"
-                            )} />
-                        </div>
-                    ))}
-                </div>
-                <p className="text-[10px] text-silk/30 text-center italic">「継続こそが、高みへの唯一の道だ」</p>
-            </section>
+            <TrainingCalendar records={records} />
+
 
             <div className="grid gap-6">
                 {records.length > 0 ? (

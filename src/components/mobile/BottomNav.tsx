@@ -2,22 +2,23 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Search, Lightbulb, PlayCircle, ClipboardList, BarChart2 } from "lucide-react";
+import { Search, Lightbulb, PlayCircle, ClipboardList, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
     { label: "探す", icon: Search, href: "/" },
     { label: "コツ", icon: Lightbulb, href: "/tips" },
+    { label: "相談", icon: Sparkles, href: "/qa" },
     { label: "練習", icon: PlayCircle, href: "/practice" },
     { label: "履歴", icon: ClipboardList, href: "/records" },
-    { label: "進捗", icon: BarChart2, href: "/level" },
 ];
+
 
 export function BottomNav() {
     const pathname = usePathname();
 
     return (
-        <nav className="fixed bottom-0 left-0 right-0 z-50 glass border-t border-white/10 px-6 pb-6 pt-3 flex justify-between items-center rounded-t-3xl sm:hidden">
+        <nav className="fixed bottom-0 left-0 right-0 z-50 glass border-t border-white/10 px-6 pb-6 pt-3 flex justify-between items-center rounded-t-3xl sm:bottom-6 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 sm:w-full sm:max-w-md sm:rounded-3xl sm:border-x">
             {navItems.map((item) => {
                 const isActive = pathname === item.href;
                 const Icon = item.icon;

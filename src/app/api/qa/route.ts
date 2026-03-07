@@ -11,22 +11,43 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: "Question is required" }, { status: 400 });
         }
 
-        // 1. 関連する動画要約を取得（簡易的な全文検索または最新の要約）
-        const relevantVideos = await prisma.video.findMany({
-            take: 5,
-            where: { summary: { not: null } },
-            orderBy: { publishedAt: "desc" },
-            select: { title: true, summary: true, youtubeId: true }
-        });
+        // 1. 質問からキーワードを抽出して関連動画を検索 (簡易実装)
+        const keywords = question.split(/[\s　,、]+/).filter((k: string) => k.length > 1);
+        
+        let relevantVideos;
+        if (keywords.length > 0) {
+            relevantVideos = await prisma.video.findMany({
+                where: {
+                    OR: [
+                        ...keywords.map((k: string) => ({ title: { contains: k } })),
+                        ...keywords.map((k: string) => ({ summary: { contains: k } })),
+                    ]
+                },
+                take: 10,
+                select: { title: true, summary: true, youtubeId: true, difficultyLevel: true }
+            });
+        }
+
+        // 検索結果が少ない場合は最新動画を補完
+        if (!relevantVideos || relevantVideos.length < 3) {
+            const recentVideos = await prisma.video.findMany({
+                take: 10,
+                orderBy: { publishedAt: "desc" },
+                select: { title: true, summary: true, youtubeId: true, difficultyLevel: true }
+            });
+            relevantVideos = [...(relevantVideos || []), ...recentVideos].slice(0, 10);
+        }
 
         const context = relevantVideos
-            .map(v => `動画: ${v.title}\n内容: ${v.summary}`)
+            .map(v => `動画ID: ${v.youtubeId}\nタイトル: ${v.title}\nコーチの分析: ${v.summary}`)
             .join("\n\n");
 
         // 2. Geminiに回答を依頼
+        // プロンプトに「動画IDを引用して推薦してくれ」という指示を追加
         const prompt = QA_PROMPT(question, context);
         const geminiResult = await climbingCoachModel.generateContent(prompt);
         const responseText = geminiResult.response.text();
+
 
         const jsonStr = responseText.replace(/```json\n?|\n?```/g, "").trim();
         const analysis = JSON.parse(jsonStr);
@@ -45,8 +66,10 @@ export async function POST(request: Request) {
             answer: analysis.answer,
             reasoning: analysis.reasoning,
             caution: analysis.caution,
+            recommendedVideoIds: analysis.recommendedVideoIds || [],
             sources: relevantVideos
         });
+
     } catch (error) {
         console.error("QA error:", error);
         return NextResponse.json({ error: "Failed to process question" }, { status: 500 });

@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Save, Plus, X, Check, Target, MapPin } from "lucide-react";
+import { Save, Plus, X, Check, Target, MapPin, Play } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
+import Image from "next/image";
 
 interface RouteEntry {
     grade: string;
@@ -17,6 +19,7 @@ export default function PracticeForm() {
     const [reflection, setReflection] = useState("");
     const [routes, setRoutes] = useState<RouteEntry[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [coachResult, setCoachResult] = useState<any>(null);
 
     const addRoute = () => {
         setRoutes([...routes, { grade: "5級", success: true, notes: "" }]);
@@ -49,8 +52,10 @@ export default function PracticeForm() {
             });
 
             if (response.ok) {
-                router.push("/records");
-                router.refresh();
+                const data = await response.json();
+                setCoachResult(data);
+                // router.push("/records"); // Don't redirect immediately
+                // router.refresh();
             }
         } catch (error) {
             console.error(error);
@@ -58,6 +63,83 @@ export default function PracticeForm() {
             setIsSubmitting(false);
         }
     };
+
+    if (coachResult) {
+        return (
+            <div className="space-y-8 animate-in fade-in zoom-in-95 duration-1000 pb-24">
+                <header className="py-12 text-center space-y-4">
+                    <div className="w-20 h-20 bg-accent/20 rounded-full flex items-center justify-center mx-auto mb-6 ring-4 ring-accent/10">
+                        <Check size={40} className="text-accent" />
+                    </div>
+                    <h1 className="text-4xl text-silk font-serif font-bold italic">Session Logged.</h1>
+                    <p className="text-silk/60">素晴らしい練習でした。コーチの分析が終わりました。</p>
+                </header>
+
+                <section className="premium-card glass border-l-4 border-accent p-8 space-y-6">
+                    <div className="flex items-center gap-3 text-accent mb-2">
+                        <div className="bg-accent text-base px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-tighter">AI Coach</div>
+                        <h2 className="text-xl font-serif text-silk font-bold italic">Training Analysis</h2>
+                    </div>
+
+                    <div className="space-y-4">
+                        <p className="text-lg text-silk leading-relaxed font-medium">
+                            「{coachResult.aiAdvice}」
+                        </p>
+
+                        <div className="bg-white/5 rounded-2xl p-6 border border-white/5 space-y-3">
+                            <h3 className="text-xs font-bold text-accent uppercase tracking-widest flex items-center gap-2">
+                                <Target size={14} />
+                                次回の目標
+                            </h3>
+                            <p className="text-silk/80 text-sm leading-relaxed">
+                                {coachResult.nextGoal}
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                {coachResult.recommendedVideoId && (
+                    <section className="space-y-4">
+                        <h3 className="text-sm font-serif text-silk/60 italic ml-2">Recommended for you:</h3>
+                        <Link href={`/videos/${coachResult.recommendedVideoId}`} className="block premium-card glass p-4 border border-white/10 hover:border-accent/30 transition-all group">
+                            <div className="flex gap-4">
+                                <div className="relative w-32 aspect-video rounded-xl overflow-hidden flex-shrink-0">
+                                    <Image
+                                        src={`https://i.ytimg.com/vi/${coachResult.recommendedVideoId}/hqdefault.jpg`}
+                                        alt="Recommended Video"
+                                        fill
+                                        className="object-cover"
+                                    />
+                                    <div className="absolute inset-0 flex items-center justify-center bg-base/20 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <Play size={20} fill="white" />
+                                    </div>
+                                </div>
+                                <div className="flex-1 space-y-1">
+                                    <h4 className="text-sm font-bold text-silk group-hover:text-accent transition-colors line-clamp-2">必見のテクニック解説動画</h4>
+                                    <p className="text-[10px] text-silk/40 uppercase tracking-widest font-bold">Watch & Learn</p>
+                                </div>
+                            </div>
+                        </Link>
+                    </section>
+                )}
+
+                <div className="grid grid-cols-2 gap-4">
+                    <button
+                        onClick={() => router.push("/records")}
+                        className="w-full py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-silk text-sm font-bold transition-all"
+                    >
+                        履歴を見る
+                    </button>
+                    <button
+                        onClick={() => setCoachResult(null)}
+                        className="w-full py-4 gold-gradient rounded-2xl text-base text-sm font-bold shadow-lg shadow-accent/10 transition-all active:scale-95"
+                    >
+                        もう一度入力
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-6 duration-700 pb-24">
@@ -153,11 +235,14 @@ export default function PracticeForm() {
                     className="w-full py-5 gold-gradient rounded-3xl text-base font-bold text-base shadow-2xl shadow-accent/20 flex items-center justify-center gap-2 active:scale-95 transition-all disabled:opacity-50"
                 >
                     {isSubmitting ? (
-                        <div className="w-5 h-5 border-2 border-base/30 border-t-base rounded-full animate-spin" />
+                        <div className="flex items-center gap-3">
+                            <div className="w-5 h-5 border-2 border-base/30 border-t-base rounded-full animate-spin" />
+                            <span>Coach is thinking...</span>
+                        </div>
                     ) : (
                         <>
                             <Save size={20} />
-                            <span>記録を保存して終了</span>
+                            <span>記録を保存してコーチングを受ける</span>
                         </>
                     )}
                 </button>
