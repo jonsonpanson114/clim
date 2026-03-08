@@ -5,8 +5,10 @@ import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export function HomeSearch() {
+    const [query, setQuery] = useState("");
     const [isSearching, setIsSearching] = useState(false);
     const router = useRouter();
+
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
