@@ -45,14 +45,15 @@ export async function POST(request: Request) {
 
 
         // 2. Geminiに回答を依頼
-        // プロンプトに「動画IDを引用して推薦してくれ」という指示を追加
         const prompt = QA_PROMPT(question, context);
         const geminiResult = await climbingCoachModel.generateContent(prompt);
         const responseText = geminiResult.response.text();
 
-
-        const jsonStr = responseText.replace(/```json\n?|\n?```/g, "").trim();
+        // JSON部分をより堅牢に抽出
+        const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+        const jsonStr = jsonMatch ? jsonMatch[0] : responseText;
         const analysis = JSON.parse(jsonStr);
+
 
         // 3. セッションをDBに保存
         const session = await prisma.qASession.create({

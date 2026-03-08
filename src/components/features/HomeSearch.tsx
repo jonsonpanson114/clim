@@ -5,16 +5,18 @@ import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export function HomeSearch() {
-    const [query, setQuery] = useState("");
+    const [isSearching, setIsSearching] = useState(false);
     const router = useRouter();
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
         const trimmed = query.trim();
-        if (!trimmed) return;
+        if (!trimmed || isSearching) return;
         
+        setIsSearching(true);
         router.push(`/qa?q=${encodeURIComponent(trimmed)}`);
     };
+
 
 
 
@@ -33,10 +35,12 @@ export function HomeSearch() {
                 />
                 <button
                     type="submit"
-                    className="absolute right-2 top-2 bottom-2 px-3 bg-accent text-base text-[10px] font-black uppercase tracking-widest rounded-xl shadow-lg shadow-accent/20 active:scale-95 transition-all text-white"
+                    disabled={isSearching || !query.trim()}
+                    className="absolute right-2 top-2 bottom-2 px-3 bg-accent text-base text-[10px] font-black uppercase tracking-widest rounded-xl shadow-lg shadow-accent/20 active:scale-95 transition-all text-white disabled:opacity-50"
                 >
-                    Search
+                    {isSearching ? "..." : "Search"}
                 </button>
+
 
             </form>
         </section>
