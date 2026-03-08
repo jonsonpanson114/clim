@@ -18,6 +18,7 @@ model Video {
   summary         String?
   summaryData     String?
   difficultyLevel String?
+  isExternal      Boolean          @default(false)
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
   favorites       Favorite?
@@ -26,6 +27,7 @@ model Video {
   quizzes         Quiz[]
   notes           VideoNote?
 }
+
 
 model Favorite {
   videoId   String   @id @unique
@@ -45,7 +47,9 @@ model CommonTip {
   content        String
   category       String
   difficulty     String?
+  isExternal     Boolean  @default(false)
   sourceVideoIds String
+
   createdAt      DateTime @default(now())
 }
 
