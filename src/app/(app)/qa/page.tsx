@@ -1,10 +1,12 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, Suspense } from "react";
 import { Send, User, Bot, Loader2, Sparkles, Youtube, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSearchParams } from "next/navigation";
+
 
 interface VideoSource {
     youtubeId: string;
@@ -22,7 +24,8 @@ interface Message {
     recommendedVideos?: VideoSource[];
 }
 
-export default function QAPage() {
+function QAContent() {
+    const searchParams = useSearchParams();
     const [messages, setMessages] = useState<Message[]>([
         {
             role: "bot",
@@ -32,6 +35,17 @@ export default function QAPage() {
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
+    const hasInitialized = useRef(false);
+
+    useEffect(() => {
+        const query = searchParams.get("q");
+        if (query && !hasInitialized.current) {
+            hasInitialized.current = true;
+            processQuestion(query);
+        }
+    }, [searchParams]);
+
+
 
     useEffect(() => {
         if (scrollRef.current) {
@@ -42,26 +56,22 @@ export default function QAPage() {
         }
     }, [messages, isLoading]);
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!input.trim() || isLoading) return;
+    const processQuestion = async (question: string) => {
+        if (!question.trim() || isLoading) return;
 
-        const userMsg = input;
-        setInput("");
-        setMessages((prev) => [...prev, { role: "user", content: userMsg }]);
+        setMessages((prev) => [...prev, { role: "user", content: question }]);
         setIsLoading(true);
 
         try {
             const response = await fetch("/api/qa", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ question: userMsg }),
+                body: JSON.stringify({ question }),
             });
 
             const data = await response.json();
             if (data.error) throw new Error(data.error);
 
-            // Filter sources based on recommendedVideoIds from Gemini
             const recommended = data.sources?.filter((s: VideoSource) => 
                 data.recommendedVideoIds?.includes(s.youtubeId)
             ) || [];
@@ -85,6 +95,14 @@ export default function QAPage() {
             setIsLoading(false);
         }
     };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        const userMsg = input;
+        setInput("");
+        processQuestion(userMsg);
+    };
+
 
     return (
         <div className="flex flex-col h-[calc(100dvh-120px)] max-w-2xl mx-auto">
@@ -265,6 +283,18 @@ export default function QAPage() {
     );
 }
 
+export default function QAPage() {
+    return (
+        <Suspense fallback={
+            <div className="flex items-center justify-center h-full">
+                <Loader2 className="w-8 h-8 animate-spin text-accent" />
+            </div>
+        }>
+            <QAContent />
+        </Suspense>
+    );
+}
+
 function AlertCircleIcon() {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
@@ -274,3 +304,4 @@ function AlertCircleIcon() {
         </svg>
     );
 }
+

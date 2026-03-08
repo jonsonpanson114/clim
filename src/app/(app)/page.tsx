@@ -4,10 +4,14 @@ import { prisma } from "@/lib/db/prisma";
 import Link from "next/link";
 import { VideoCard } from "@/components/features/VideoCard";
 import { SyncButton } from "@/components/features/SyncButton";
+import { HomeSearch } from "@/components/features/HomeSearch";
+
+import { InstallBanner } from "@/components/features/InstallBanner";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
+
     const latestVideos = await prisma.video.findMany({
         take: 4,
         orderBy: { publishedAt: "desc" },
@@ -105,16 +109,7 @@ export default async function HomePage() {
                 )}
             </section>
 
-            <section className="relative group">
-                <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-silk/40 group-focus-within:text-accent transition-colors">
-                    <Search size={18} />
-                </div>
-                <input
-                    type="text"
-                    placeholder="技術、ムーブ、課題を検索..."
-                    className="w-full bg-secondary/30 border border-white/5 rounded-2xl py-3 pl-10 pr-4 text-sm text-silk placeholder:text-silk/20 focus:outline-none focus:ring-1 focus:ring-accent/30 focus:border-accent/30 transition-all glass"
-                />
-            </section>
+            <HomeSearch />
 
             <section className="animate-in fade-in duration-1000 delay-200">
                 <Link 
@@ -172,6 +167,9 @@ export default async function HomePage() {
                     )}
                 </div>
             </section>
+
+            <InstallBanner />
         </div>
+
     );
 }
