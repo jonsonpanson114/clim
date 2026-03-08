@@ -10,7 +10,9 @@ interface VideoSource {
     youtubeId: string;
     title: string;
     summary: string;
+    isExternal?: boolean;
 }
+
 
 interface Message {
     role: "user" | "bot";
@@ -162,8 +164,13 @@ export default function QAPage() {
                                                     <Link 
                                                         key={vid.youtubeId} 
                                                         href={`/videos/${vid.youtubeId}`}
-                                                        className="group flex items-center gap-3 p-3 glass border border-white/5 rounded-2xl hover:border-accent/40 transition-all active:scale-[0.98]"
+                                                        className="group flex items-center gap-3 p-3 glass border border-white/5 rounded-2xl hover:border-accent/40 transition-all active:scale-[0.98] relative overflow-hidden"
                                                     >
+                                                        {vid.isExternal && (
+                                                            <div className="absolute top-0 right-0 px-2 py-0.5 bg-blue-500/10 text-blue-400 text-[6px] font-black uppercase tracking-tighter border-bl border-white/5 rounded-bl-md">
+                                                                Ext
+                                                            </div>
+                                                        )}
                                                         <div className="relative w-20 aspect-video rounded-lg overflow-hidden bg-silk/10 border border-white/5">
                                                             <img 
                                                                 src={`https://img.youtube.com/vi/${vid.youtubeId}/mqdefault.jpg`} 
@@ -176,12 +183,13 @@ export default function QAPage() {
                                                                 {vid.title}
                                                             </h4>
                                                             <p className="text-[9px] text-silk/40 line-clamp-1 italic">
-                                                                コーチがこの動画を選んだ理由あり
+                                                                {vid.isExternal ? "外部ライブラリから引用" : "公式の奥義から推薦"}
                                                             </p>
                                                         </div>
                                                         <ArrowRight size={14} className="text-silk/20 group-hover:text-accent group-hover:translate-x-1 transition-all" />
                                                     </Link>
                                                 ))}
+
                                             </div>
                                         </div>
                                     )}

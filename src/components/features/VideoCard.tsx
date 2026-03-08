@@ -12,8 +12,10 @@ interface VideoCardProps {
     thumbnailUrl: string;
     publishedAt: Date;
     difficultyLevel?: string;
+    isExternal?: boolean;
     className?: string;
 }
+
 
 export function VideoCard({
     id,
@@ -22,8 +24,10 @@ export function VideoCard({
     thumbnailUrl,
     publishedAt,
     difficultyLevel,
+    isExternal,
     className,
 }: VideoCardProps) {
+
     const dateStr = new Date(publishedAt).toLocaleDateString("ja-JP");
 
     return (
@@ -49,7 +53,17 @@ export function VideoCard({
                     </div>
                 </div>
 
+                {isExternal && (
+                    <div className="absolute top-3 left-3 z-20">
+                        <span className="text-[10px] font-bold px-2 py-1 bg-accent/90 backdrop-blur-md border border-white/10 text-base rounded-full uppercase tracking-tighter flex items-center gap-1">
+                            <span className="w-1 h-1 bg-base rounded-full animate-pulse" />
+                            World / 翻訳済
+                        </span>
+                    </div>
+                )}
+
                 {difficultyLevel && (
+
                     <div className="absolute top-3 right-3 z-20">
                         <span className="text-[10px] font-bold px-2 py-1 bg-base/80 backdrop-blur-md border border-white/10 text-silk rounded-full uppercase tracking-tighter">
                             {difficultyLevel}

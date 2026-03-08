@@ -24,7 +24,7 @@ export async function POST(request: Request) {
                     ]
                 },
                 take: 10,
-                select: { title: true, summary: true, youtubeId: true, difficultyLevel: true }
+                select: { title: true, summary: true, youtubeId: true, difficultyLevel: true, isExternal: true }
             });
         }
 
@@ -33,14 +33,16 @@ export async function POST(request: Request) {
             const recentVideos = await prisma.video.findMany({
                 take: 10,
                 orderBy: { publishedAt: "desc" },
-                select: { title: true, summary: true, youtubeId: true, difficultyLevel: true }
+                select: { title: true, summary: true, youtubeId: true, difficultyLevel: true, isExternal: true }
             });
+
             relevantVideos = [...(relevantVideos || []), ...recentVideos].slice(0, 10);
         }
 
         const context = relevantVideos
-            .map(v => `動画ID: ${v.youtubeId}\nタイトル: ${v.title}\nコーチの分析: ${v.summary}`)
+            .map(v => `動画ID: ${v.youtubeId}\nタイトル: ${v.title}\nソース: ${v.isExternal ? "外部の世界知識" : "公式解説"}\nコーチの分析: ${v.summary}`)
             .join("\n\n");
+
 
         // 2. Geminiに回答を依頼
         // プロンプトに「動画IDを引用して推薦してくれ」という指示を追加

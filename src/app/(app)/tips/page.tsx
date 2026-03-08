@@ -1,7 +1,8 @@
 import { prisma } from "@/lib/db/prisma";
-import { Lightbulb, Layers, Zap, Brain, Hammer, ArrowRight } from "lucide-react";
+import { Lightbulb, Layers, Zap, Brain, Hammer, ArrowRight, ShieldCheck, Globe } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { ImportVideoForm } from "@/components/tips/ImportVideoForm";
 
 const categoryIcons: Record<string, any> = {
     "ムーブ": Zap,
@@ -11,19 +12,23 @@ const categoryIcons: Record<string, any> = {
 };
 
 export default async function TipsPage(props: {
-    searchParams: Promise<{ category?: string }>;
+    searchParams: Promise<{ category?: string; source?: string }>;
 }) {
     const searchParams = await props.searchParams;
     const category = searchParams.category;
+    const source = searchParams.source || "official"; // Default to official
+
+    const where: any = {};
+    if (category) where.category = category;
+    where.isExternal = source === "external";
 
     const tips = await prisma.commonTip.findMany({
-        where: category ? { category } : {},
+        where,
         orderBy: { createdAt: "desc" },
     });
 
     const categories = ["ムーブ", "トレーニング", "メンタル", "道具"];
     
-    // helper to get the first video ID from sourceVideoIds JSON
     const getFirstVideoId = (sourceVideoIds: string) => {
         try {
             const ids = JSON.parse(sourceVideoIds);
@@ -35,22 +40,49 @@ export default async function TipsPage(props: {
 
     return (
         <div className="space-y-8 animate-in fade-in duration-700 pb-20">
-            <header className="py-6">
-                <div className="flex items-center gap-2 text-accent mb-2">
-                    <Lightbulb size={24} />
-                    <h1 className="text-3xl text-silk font-serif">Technique Tips</h1>
+            <header className="py-6 flex justify-between items-start">
+                <div>
+                    <div className="flex items-center gap-2 text-accent mb-2">
+                        <Lightbulb size={24} />
+                        <h1 className="text-3xl text-silk font-serif">Technique Tips</h1>
+                    </div>
+                    <p className="text-silk/50 font-light">
+                        コーチが動画から抽出した、上達へのエッセンス。
+                    </p>
                 </div>
-                <p className="text-silk/50 font-light">
-                    コーチが動画から抽出した、上達へのエッセンス。
-                </p>
+                <ImportVideoForm />
             </header>
+
+            {/* Source Switcher */}
+            <div className="flex p-1 bg-secondary/50 rounded-xl border border-white/5 w-fit">
+                <Link
+                    href={`/tips?source=official${category ? `&category=${category}` : ""}`}
+                    className={cn(
+                        "px-6 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-2",
+                        source === "official" ? "bg-accent text-base shadow-lg" : "text-silk/40 hover:text-silk/60"
+                    )}
+                >
+                    <ShieldCheck size={14} />
+                    <span>公式解説</span>
+                </Link>
+                <Link
+                    href={`/tips?source=external${category ? `&category=${category}` : ""}`}
+                    className={cn(
+                        "px-6 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-2",
+                        source === "external" ? "bg-accent text-base shadow-lg" : "text-silk/40 hover:text-silk/60"
+                    )}
+                >
+                    <Globe size={14} />
+                    <span>外部ライブラリ</span>
+                </Link>
+            </div>
 
             <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide py-1">
                 <Link 
-                    href="/tips"
+                    href={`/tips?source=${source}`}
                     className={cn(
                         "px-4 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap border",
-                        !category ? "bg-accent text-base border-accent shadow-lg shadow-accent/20" : "bg-secondary text-silk/40 border-white/5"
+                        !category ? "bg-white/10 text-silk border-white/20" : "bg-secondary text-silk/40 border-white/5"
                     )}
                 >
                     すべて
@@ -58,10 +90,10 @@ export default async function TipsPage(props: {
                 {categories.map((cat) => (
                     <Link
                         key={cat}
-                        href={`/tips?category=${cat}`}
+                        href={`/tips?source=${source}&category=${cat}`}
                         className={cn(
                             "px-4 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap border",
-                            category === cat ? "bg-accent text-base border-accent shadow-lg shadow-accent/20" : "bg-secondary text-silk/40 border-white/5"
+                            category === cat ? "bg-white/10 text-silk border-white/20" : "bg-secondary text-silk/40 border-white/5"
                         )}
                     >
                         {cat}
@@ -76,7 +108,14 @@ export default async function TipsPage(props: {
                         const videoId = getFirstVideoId(tip.sourceVideoIds);
                         
                         const CardContent = (
-                            <div className="premium-card glass space-y-3 group border-white/5 relative hover:border-accent/30 transition-all cursor-pointer">
+                            <div className="premium-card glass space-y-3 group border-white/5 relative hover:border-accent/30 transition-all cursor-pointer overflow-hidden">
+                                {tip.isExternal && (
+                                    <div className="absolute top-0 right-0 px-3 py-1 bg-accent/90 backdrop-blur-md border-l border-b border-white/10 text-base text-[8px] font-bold uppercase tracking-tighter rounded-bl-lg flex items-center gap-1">
+                                        <span className="w-1 h-1 bg-base rounded-full animate-pulse" />
+                                        World / 翻訳済
+                                    </div>
+                                )}
+
                                 <div className="flex justify-between items-start">
                                     <div className="flex items-center gap-2 text-accent">
                                         <Icon size={18} />
@@ -108,10 +147,11 @@ export default async function TipsPage(props: {
                     })
                 ) : (
                     <div className="premium-card glass text-center py-20 text-silk/30 border-dashed border-white/5">
-                        <p>抽出されたコツがまだありません。</p>
+                        <p>{source === "official" ? "公式の解説がまだありません。" : "外部知識がまだありません。コーチに動画を教えてあげよう！"}</p>
                     </div>
                 )}
             </div>
         </div>
     );
 }
+

@@ -161,6 +161,7 @@ export default async function HomePage() {
                                 thumbnailUrl={video.thumbnailUrl || ""}
                                 publishedAt={video.publishedAt}
                                 difficultyLevel={video.difficultyLevel || undefined}
+                                isExternal={video.isExternal}
                             />
                         ))
                     ) : (
