@@ -36,12 +36,20 @@ export default async function RecordsPage() {
             <div className="grid gap-6">
                 {records.length > 0 ? (
                     records.map((record) => {
-                        const routes = JSON.parse(record.routes || "[]") as string[];
+                        // Handle both old format (objects) and new format (strings)
+                        const rawRoutes = JSON.parse(record.routes || "[]");
+                        const routes: string[] = Array.isArray(rawRoutes) ? rawRoutes.map((r: any) => {
+                            if (typeof r === 'string') return r;
+                            // Convert old object format to new string format for display
+                            return `${r.grade || '不明'}：${r.success ? '1/1' : '0/1'}${r.notes ? `（${r.notes}）` : ""}`;
+                        }) : [];
                         
-                        // Let's count success from strings like "3級：3/5"
+                        // Count successes robustly
                         const successCount = routes.reduce((acc, r) => {
                             const match = r.match(/：(\d+)\//);
-                            return acc + (match ? parseInt(match[1]) : 0);
+                            if (match) return acc + parseInt(match[1]);
+                            // Fallback for strings that might not match the pattern
+                            return acc + (r.includes('1/1') ? 1 : 0);
                         }, 0);
 
                         return (
@@ -72,7 +80,7 @@ export default async function RecordsPage() {
                                     {routes.map((r, i) => (
                                         <div key={i} className="text-[11px] text-silk/80 flex items-center gap-2">
                                             <div className="w-1.5 h-1.5 rounded-full bg-accent/40" />
-                                            {r}
+                                            <span className="flex-1">{r}</span>
                                         </div>
                                     ))}
                                 </div>
