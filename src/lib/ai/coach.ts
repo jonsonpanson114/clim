@@ -4,8 +4,12 @@ import { prisma } from "@/lib/db/prisma";
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
 export async function generateAICoachAdvice(reflection: string, routes: string) {
+    console.log("[AI Coach] Advice generation requested");
+    console.log("[AI Coach] GEMINI_API_KEY presence:", !!process.env.GEMINI_API_KEY);
+    
     if (!process.env.GEMINI_API_KEY) {
-        return { advice: "Gemini API key is not configured.", recommendedVideoId: null };
+        console.error("[AI Coach] Missing GEMINI_API_KEY!");
+        return { advice: "AIキーが設定されていません。管理者に連絡してください。", recommendedVideoId: null, nextGoal: "APIキーを設定しましょう" };
     }
 
     try {
