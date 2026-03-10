@@ -1,21 +1,11 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import { prisma } from "@/lib/db/prisma";
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+import { climbingCoachModel } from "@/lib/gemini/client";
 
 export async function generateAICoachAdvice(reflection: string, routes: string) {
-    console.log("[AI Coach] --- START Advice Generation ---");
-    const apiKey = process.env.GEMINI_API_KEY;
-    console.log("[AI Coach] API Key configured:", !!apiKey);
+    console.log("[AI Coach] --- START Advice Generation using Shared Model ---");
     
-    if (!apiKey) {
-        console.error("[AI Coach] Error: GEMINI_API_KEY is missing!");
-        return { advice: "AIキーが設定されていません。", recommendedVideoId: null, nextGoal: "管理画面でAPIキーを確認してください。" };
-    }
-
     try {
-        const genAI = new GoogleGenerativeAI(apiKey);
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = climbingCoachModel;
 
         // 1. Get latest relevant videos - with error boundary
         let videos: any[] = [];
