@@ -36,8 +36,13 @@ export default async function RecordsPage() {
             <div className="grid gap-6">
                 {records.length > 0 ? (
                     records.map((record) => {
-                        const routes = JSON.parse(record.routes || "[]");
-                        const successCount = routes.filter((r: any) => r.success).length;
+                        const routes = JSON.parse(record.routes || "[]") as string[];
+                        
+                        // Let's count success from strings like "3級：3/5"
+                        const successCount = routes.reduce((acc, r) => {
+                            const match = r.match(/：(\d+)\//);
+                            return acc + (match ? parseInt(match[1]) : 0);
+                        }, 0);
 
                         return (
                             <div key={record.id} className="premium-card glass border-white/5 space-y-4">
@@ -63,31 +68,21 @@ export default async function RecordsPage() {
                                     )}
                                 </div>
 
+                                <div className="space-y-2">
+                                    {routes.map((r, i) => (
+                                        <div key={i} className="text-[11px] text-silk/80 flex items-center gap-2">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-accent/40" />
+                                            {r}
+                                        </div>
+                                    ))}
+                                </div>
+
                                 {record.reflection && (
                                     <p className="text-xs text-silk/60 leading-relaxed italic border-l-2 border-white/10 pl-3">
                                         "{record.reflection}"
                                     </p>
                                 )}
-
-                                <div className="pt-2 flex justify-between items-end border-t border-white/5">
-                                    <div className="flex -space-x-1">
-                                        {routes.slice(0, 5).map((r: any, i: number) => (
-                                            <div
-                                                key={i}
-                                                className={cn(
-                                                    "w-6 h-6 rounded-full border-2 border-base flex items-center justify-center text-[8px] font-bold",
-                                                    r.success ? "bg-accent text-base" : "bg-secondary text-silk/40"
-                                                )}
-                                            >
-                                                {r.grade}
-                                            </div>
-                                        ))}
-                                        {routes.length > 5 && (
-                                            <div className="w-6 h-6 rounded-full border-2 border-base bg-silk/10 text-silk/60 flex items-center justify-center text-[8px]">
-                                                +{routes.length - 5}
-                                            </div>
-                                        )}
-                                    </div>
+                                <div className="pt-2 border-t border-white/5 flex justify-end">
                                     <button className="text-[10px] text-accent font-bold hover:underline">詳細を表示</button>
                                 </div>
                             </div>

@@ -9,8 +9,9 @@ import Image from "next/image";
 
 interface RouteEntry {
     grade: string;
-    success: boolean;
-    notes: string;
+    attempts: number;
+    successes: number;
+    comment: string;
 }
 
 export default function PracticeForm() {
@@ -22,7 +23,7 @@ export default function PracticeForm() {
     const [coachResult, setCoachResult] = useState<any>(null);
 
     const addRoute = () => {
-        setRoutes([...routes, { grade: "5級", success: true, notes: "" }]);
+        setRoutes([...routes, { grade: "3級", attempts: 5, successes: 3, comment: "" }]);
     };
 
     const updateRoute = (index: number, field: keyof RouteEntry, value: any) => {
@@ -39,13 +40,18 @@ export default function PracticeForm() {
         e.preventDefault();
         setIsSubmitting(true);
 
+        // Format routes for the AI and DB as requested: "3級：3/5（コメント）"
+        const formattedRoutes = routes.map(r => 
+            `${r.grade}：${r.successes}/${r.attempts}${r.comment ? `（${r.comment}）` : ""}`
+        );
+
         try {
             const response = await fetch("/api/records", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     gymName,
-                    routes,
+                    routes: formattedRoutes,
                     reflection,
                     date: new Date(),
                 }),
@@ -54,8 +60,6 @@ export default function PracticeForm() {
             if (response.ok) {
                 const data = await response.json();
                 setCoachResult(data);
-                // router.push("/records"); // Don't redirect immediately
-                // router.refresh();
             }
         } catch (error) {
             console.error(error);
@@ -179,35 +183,52 @@ export default function PracticeForm() {
                         </button>
                     </div>
 
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                         {routes.map((route, index) => (
-                            <div key={index} className="flex gap-2 items-center animate-in zoom-in-95 duration-300">
-                                <input
-                                    value={route.grade}
-                                    onChange={(e) => updateRoute(index, "grade", e.target.value)}
-                                    className="w-20 bg-secondary/30 border border-white/5 rounded-xl p-2 text-center text-silk text-sm focus:ring-1 focus:ring-accent/50"
-                                    placeholder="グレード"
-                                />
-                                <button
-                                    type="button"
-                                    onClick={() => updateRoute(index, "success", !route.success)}
-                                    className={cn(
-                                        "flex-1 py-2 rounded-xl border transition-all flex items-center justify-center gap-2 text-xs font-bold",
-                                        route.success
-                                            ? "bg-accent/20 border-accent/40 text-accent"
-                                            : "bg-secondary/40 border-white/10 text-silk/30"
-                                    )}
-                                >
-                                    <Check size={14} />
-                                    {route.success ? "SUCCESS" : "FAILED"}
-                                </button>
+                            <div key={index} className="glass border border-white/5 rounded-2xl p-4 space-y-3 animate-in zoom-in-95 duration-300 relative group">
                                 <button
                                     type="button"
                                     onClick={() => removeRoute(index)}
-                                    className="p-2 text-silk/20 hover:text-red-400 transition-colors"
+                                    className="absolute top-2 right-2 p-1 text-silk/20 hover:text-red-400 transition-colors"
                                 >
-                                    <X size={18} />
+                                    <X size={16} />
                                 </button>
+                                
+                                <div className="flex gap-3 items-center">
+                                    <input
+                                        value={route.grade}
+                                        onChange={(e) => updateRoute(index, "grade", e.target.value)}
+                                        className="w-20 bg-secondary/30 border border-white/5 rounded-xl p-2 text-center text-silk text-sm font-bold focus:ring-1 focus:ring-accent/50"
+                                        placeholder="グレード"
+                                    />
+                                    <div className="flex items-center gap-2 flex-1 text-silk/50 text-xs font-bold uppercase tracking-widest">
+                                        <div className="flex-1 space-y-1">
+                                            <span className="text-[8px] pl-1">Success</span>
+                                            <input
+                                                type="number"
+                                                value={route.successes}
+                                                onChange={(e) => updateRoute(index, "successes", parseInt(e.target.value) || 0)}
+                                                className="w-full bg-secondary/30 border border-white/5 rounded-xl p-2 text-center text-silk text-sm focus:ring-1 focus:ring-accent/50"
+                                            />
+                                        </div>
+                                        <span className="pt-5 text-silk/20">/</span>
+                                        <div className="flex-1 space-y-1">
+                                            <span className="text-[8px] pl-1">Total</span>
+                                            <input
+                                                type="number"
+                                                value={route.attempts}
+                                                onChange={(e) => updateRoute(index, "attempts", parseInt(e.target.value) || 0)}
+                                                className="w-full bg-secondary/30 border border-white/5 rounded-xl p-2 text-center text-silk text-sm focus:ring-1 focus:ring-accent/50"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <input
+                                    value={route.comment}
+                                    onChange={(e) => updateRoute(index, "comment", e.target.value)}
+                                    className="w-full bg-secondary/20 border border-white/5 rounded-xl p-2 px-3 text-silk text-[11px] placeholder:text-silk/20 focus:ring-1 focus:ring-accent/40"
+                                    placeholder="ここが核心だった、など一言"
+                                />
                             </div>
                         ))}
                         {routes.length === 0 && (
