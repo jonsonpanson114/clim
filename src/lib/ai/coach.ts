@@ -18,7 +18,7 @@ export async function generateAICoachAdvice(reflection: string, routes: string) 
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
         // 1. Get latest relevant videos - with error boundary
-        let videos = [];
+        let videos: any[] = [];
         try {
             console.log("[AI Coach] Fetching videos from DB...");
             videos = await prisma.video.findMany({
